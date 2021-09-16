@@ -10,7 +10,7 @@ RUN mvn -f /create-cosmosdb-action/pom.xml clean package
 # Package stage
 #
 FROM openjdk:11-jre-slim
-COPY --from=build /create-cosmosdb-action/action-0.0.1-SNAPSHOT.jar /usr/local/lib/action.jar
+COPY --from=build /create-cosmosdb-action/target/action-0.0.1-SNAPSHOT.jar /usr/local/lib/action.jar
 EXPOSE 8080
 ENTRYPOINT ["java","-jar","/usr/local/lib/action.jar"]
 
