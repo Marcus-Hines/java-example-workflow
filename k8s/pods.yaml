@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cosmosapp
+  labels:
+    purpose: example-app-that-communicates-with-cosmosdb-msi
+    app: cosmosapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cosmosapp
+  template:
+    metadata:
+      labels:
+        app: cosmosapp
+    spec:
+      containers:
+        - name: cosmosapp
+          image: mahinescosmosapp.azurecr.io/cosmosapp:latest
+          ports:
+            - containerPort: 80
+          env:
+            - name: AZURE_CLIENT_ID
+              value: "63b139e9-2b3e-437d-a4c2-a38ea772fb35"
+            - name: AZURE_TENANT_ID
+              value: "72f988bf-86f1-41af-91ab-2d7cd011db47"

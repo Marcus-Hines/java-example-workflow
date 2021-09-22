@@ -1,6 +1,6 @@
 package com.createcosmos.action;
 
-import com.createcosmos.action.resource.Action;
+import com.createcosmos.action.resource.App;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -9,8 +9,8 @@ public class ActionApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(ActionApplication.class, args);
-		Action createCosmosAction = new Action();
-		createCosmosAction.run();
+		App createCosmosApp = new App("fake-db");
+		createCosmosApp.run();
 	}
 
 }
