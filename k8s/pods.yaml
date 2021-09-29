@@ -17,11 +17,10 @@ spec:
     spec:
       containers:
         - name: cosmosapp
-          image: mahinescosmosapp.azurecr.io/cosmosapp:latest
+          image: mahinesacr.azurecr.io/cosmosapp:latest
+          imagePullPolicy: Always
           ports:
             - containerPort: 80
           env:
-            - name: AZURE_CLIENT_ID
-              value: "63b139e9-2b3e-437d-a4c2-a38ea772fb35"
-            - name: AZURE_TENANT_ID
-              value: "72f988bf-86f1-41af-91ab-2d7cd011db47"
+            - name: ENV_VARS_GO_HERE
+              value: "arbitrary value"
