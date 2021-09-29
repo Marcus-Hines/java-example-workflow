@@ -1,23 +1,17 @@
 package com.createcosmos.action.resource;
 
 import com.azure.cosmos.*;
-import com.azure.cosmos.models.CosmosDatabaseResponse;
 import com.azure.cosmos.models.CosmosItemResponse;
+import com.azure.cosmos.models.CosmosQueryRequestOptions;
 import com.azure.cosmos.models.PartitionKey;
+import com.azure.cosmos.util.CosmosPagedIterable;
 import com.azure.identity.*;
-import com.azure.security.keyvault.secrets.SecretClient;
-import com.azure.security.keyvault.secrets.SecretClientBuilder;
-import com.microsoft.azure.documentdb.Database;
-import com.microsoft.azure.documentdb.Document;
-import org.springframework.beans.factory.config.CustomEditorConfigurer;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 public class App {
     private final String DATABASE_NAME = "DemoDatabase";
     private final String CONTAINER_NAME = "CustomerDetails";
+
     private final String ENDPOINT = "https://mahinescosmos.documents.azure.com:443/";
     public final String MANAGED_IDENTITY_CLIENT_ID = "5bca3991-8179-4edc-86b4-fb8a145d6f6d";
 
@@ -36,15 +30,25 @@ public class App {
 
     public void run() {
         System.out.println("App is starting...");
-        this.getCustomer("24");
+        this.getAllCustomers();
         this.cosmosClient.close();
     }
 
-    private Customer getCustomer(String customerID){
-        CosmosItemResponse<Customer> response = this.container.readItem(customerID, new PartitionKey("Sweets"), Customer.class);
-        Customer customer = response.getItem();
-        System.out.println("Returning customer: " + customer.getFirstname() + " " + customer.getLastname());
+    private Customer getAllCustomers(){
+        CosmosQueryRequestOptions queryOptions = new CosmosQueryRequestOptions();
+        CosmosPagedIterable<Customer> results = container.queryItems("SELECT * FROM c", queryOptions, Customer.class);
 
+        for(Customer customer : results){
+            System.out.println("Returning customer: " + customer.getFirstname() + " " + customer.getLastname());
+        }
+        return null;
+    }
+
+    private Customer getCustomer(String customerID){
+        CosmosItemResponse<Customer> response = this.container.readItem(customerID, new PartitionKey("id"), Customer.class);
+        Customer customer = response.getItem();
+
+        System.out.println("Returning customer: " + customer.getFirstname() + " " + customer.getLastname());
         return customer;
     }
 
