@@ -1,1 +1,1 @@
-# create-cosmosdb-action-example-app
+# cosmosdb-java-example-app
