@@ -16,25 +16,6 @@ on:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
-  build:
-    # The type of runner that the job will run on
-    runs-on: ubuntu-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
-    steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
-
-      # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: echo Beginning workflows
-
-      # Runs a set of commands using the runners shell
-      - name: Run a multi-line script
-        run: |
-          echo Building and Pushing Image $IMAGE_TAG
-          docker build . -t $IMAGE_TAG
-          docker push $IMAGE_TAG
   aks:
     name: "Run on AKS"
     concurrency: test
@@ -59,7 +40,7 @@ jobs:
           username: ${{ secrets.ARM_CLIENT_ID }}
           password: ${{ secrets.ARM_CLIENT_SECRET }}
 
-      # Container build and push to a Azure Container Registry (ACR)
+      # Container build and push to an Azure Container Registry (ACR)
       - run: |
           docker build . -t ${{ secrets.CLUSTER_NAME }}.azurecr.io/${{ secrets.APP_NAME }}:${{ github.sha }}
           docker push ${{ secrets.CLUSTER_NAME }}.azurecr.io/${{ secrets.APP_NAME }}:${{ github.sha }}
@@ -71,7 +52,7 @@ jobs:
           cluster-name: ${{ secrets.CLUSTER_NAME }}
           resource-group: ${{ secrets.RESOURCE_GROUP_NAME }}
 
-      # Create namespace if doesn't exist
+      # Create namespace if one doesn't exist
       - run: |
           kubectl create namespace ${{ secrets.NAMESPACE }} --dry-run -o json | kubectl apply -f -
       # Create image pull secret for ACR
@@ -88,12 +69,9 @@ jobs:
       - uses: azure/k8s-deploy@v1
         with:
           manifests: |
-            manifests/deployment.yaml
-            manifests/service.yaml
-            manifests/ingress.yaml
+            k8s/deployment.yaml
           images: |
             ${{ secrets.CLUSTER_NAME }}.azurecr.io/${{ secrets.APP_NAME }}:${{ github.sha }}
           imagepullsecrets: |
             ${{ secrets.SECRET_NAME }}
           namespace: ${{ secrets.NAMESPACE }}
-
