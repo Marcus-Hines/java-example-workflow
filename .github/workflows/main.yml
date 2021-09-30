@@ -1,23 +1,14 @@
-# This is a basic workflow to help you get started with Actions
+name: go_echo
 
-name: CI
-
-# Controls when the workflow will run
 on:
-  # Triggers the workflow on push or pull request events but only for the main branch
   push:
     branches: [ main ]
   pull_request:
     branches: [ main ]
 
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
-
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "Run on AKS"
   aks:
-    name: "Run on AKS"
+    name: "Run app on AKS"
     concurrency: test
     runs-on: ubuntu-latest
     steps:
@@ -40,7 +31,7 @@ jobs:
           username: ${{ secrets.ARM_CLIENT_ID }}
           password: ${{ secrets.ARM_CLIENT_SECRET }}
 
-      # Container build and push to an Azure Container Registry (ACR)
+      # Container build and push to a Azure Container Registry(ACR)
       - run: |
           docker build . -t ${{ secrets.CLUSTER_NAME }}.azurecr.io/${{ secrets.APP_NAME }}:${{ github.sha }}
           docker push ${{ secrets.CLUSTER_NAME }}.azurecr.io/${{ secrets.APP_NAME }}:${{ github.sha }}
@@ -52,9 +43,20 @@ jobs:
           cluster-name: ${{ secrets.CLUSTER_NAME }}
           resource-group: ${{ secrets.RESOURCE_GROUP_NAME }}
 
-      # Create namespace if one doesn't exist
+      # Create namespace if doesn't exist
       - run: |
           kubectl create namespace ${{ secrets.NAMESPACE }} --dry-run -o json | kubectl apply -f -
+
+      # Create image pull secret for ACR
+      - uses: azure/k8s-create-secret@v1
+        with:
+          container-registry-url: ${{ secrets.CLUSTER_NAME }}.azurecr.io
+          container-registry-username: ${{ secrets.ARM_CLIENT_ID }}
+          container-registry-password: ${{ secrets.ARM_CLIENT_SECRET }}
+          secret-name: ${{ secrets.SECRET_NAME }}
+          namespace: ${{ secrets.NAMESPACE }}
+          force: true
+
       # Deploy app to AKS
       - uses: azure/k8s-deploy@v1
         with:
