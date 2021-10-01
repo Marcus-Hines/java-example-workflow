@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: cosmosapp
-          image: mahinesacr.azurecr.io/cosmosapp:latest
+          image: cosmosapp.azurecr.io/cosmosapp
           imagePullPolicy: Always
           ports:
             - containerPort: 80

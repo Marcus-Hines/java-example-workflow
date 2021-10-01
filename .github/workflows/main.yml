@@ -43,7 +43,7 @@ jobs:
           cluster-name: ${{ secrets.CLUSTER_NAME }}
           resource-group: ${{ secrets.RESOURCE_GROUP_NAME }}
 
-      # Create namespace if doesn't exist
+      # Create namespace if it doesn't exist
       - run: |
           kubectl create namespace ${{ secrets.NAMESPACE }} --dry-run -o json | kubectl apply -f -
 
@@ -56,7 +56,7 @@ jobs:
           secret-name: ${{ secrets.SECRET_NAME }}
           namespace: ${{ secrets.NAMESPACE }}
           force: true
-
+        id: create-secret
       # Deploy app to AKS
       - uses: azure/k8s-deploy@v1
         with:
