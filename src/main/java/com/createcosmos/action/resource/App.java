@@ -23,6 +23,7 @@ public class App {
         //Managed Identity Credentials
         ManagedIdentityCredential msi = createMSICredentials();
 
+
         this.cosmosClient = createCosmosClient(msi);
         this.database = cosmosClient.getDatabase(DATABASE_NAME);
         this.container = database.getContainer(CONTAINER_NAME);

@@ -13,6 +13,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - uses: Marcus-Hines/cosmosdb-create@main
+        with:
+          CLUSTER_NAME: ${{ secrets.CLUSTER_NAME }}
+          RESOURCE_GROUP_NAME: ${{ secrets.RESOURCE_GROUP_NAME }}
       - uses: gambtho/aks_create_action@main
         with:
           CLUSTER_NAME: ${{ secrets.CLUSTER_NAME }}
