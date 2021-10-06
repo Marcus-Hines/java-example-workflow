@@ -8,7 +8,7 @@ on:
 
 jobs:
   aks:
-    name: "Run the app on AKS"
+    name: "Run app on AKS"
     concurrency: test
     runs-on: ubuntu-latest
     steps:
