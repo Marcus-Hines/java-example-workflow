@@ -11,8 +11,11 @@ import com.azure.identity.*;
 public class App {
     private final String DATABASE_NAME = "DemoDatabase";
     private final String CONTAINER_NAME = "CustomerDetails";
+    //Cosmos Account Details
+    private final String COSMOS_PATH = "documents.azure.com:443/";
+    private final String COSMOS_ACCOUNT_NAME = "cosmosdbapp";
 
-    private final String ENDPOINT = "https://mahinescosmos.documents.azure.com:443/";
+    private final String ENDPOINT = "https://" + COSMOS_ACCOUNT_NAME + "." + COSMOS_PATH;
     public final String MANAGED_IDENTITY_CLIENT_ID = "5bca3991-8179-4edc-86b4-fb8a145d6f6d";
 
     private CosmosContainer container;
