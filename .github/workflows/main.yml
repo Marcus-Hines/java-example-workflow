@@ -13,6 +13,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDS }}
       - uses: Marcus-Hines/cosmosdb-create@main
         with:
           ACCOUNT_NAME: ${{ secrets.ACCOUNT_NAME }}

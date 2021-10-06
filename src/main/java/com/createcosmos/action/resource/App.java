@@ -13,7 +13,7 @@ public class App {
     private final String CONTAINER_NAME = "CustomerDetails";
 
     private final String ENDPOINT = "https://mahinescosmos.documents.azure.com:443/";
-    public final String MANAGED_IDENTITY_CLIENT_ID = "Ol-5bca3991-8179-4edc-86b4-fb8a145d6f6d";
+    public final String MANAGED_IDENTITY_CLIENT_ID = "5bca3991-8179-4edc-86b4-fb8a145d6f6d";
 
     private CosmosContainer container;
     private CosmosDatabase database;
