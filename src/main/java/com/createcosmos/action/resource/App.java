@@ -23,19 +23,25 @@ public class App {
     private CosmosClient cosmosClient;
 
     public App(String databaseName) {
+
+
         //Managed Identity Credentials
-        ManagedIdentityCredential msi = createMSICredentials();
+       // ManagedIdentityCredential msi = createMSICredentials();
+        DefaultAzureCredential credential =  new DefaultAzureCredentialBuilder().build();
+       this.cosmosClient = createCosmosClient(credential);
 
-
-        this.cosmosClient = createCosmosClient(msi);
-        this.database = cosmosClient.getDatabase(DATABASE_NAME);
-        this.container = database.getContainer(CONTAINER_NAME);
+       //this.database = cosmosClient.getDatabase(DATABASE_NAME);
+       //this.container = database.getContainer(CONTAINER_NAME);
     }
 
     public void run() {
         System.out.println("App is starting...");
-        this.getAllCustomers();
-        this.cosmosClient.close();
+      //  this.getAllCustomers();
+        DefaultAzureCredential credential =  new DefaultAzureCredentialBuilder().build();
+        CosmosClient client = new CosmosClientBuilder().credential(credential).buildClient();
+        client.close();
+
+       // this.cosmosClient.close();
     }
 
     private Customer getAllCustomers(){
@@ -56,7 +62,7 @@ public class App {
         return customer;
     }
 
-    private CosmosClient createCosmosClient(ManagedIdentityCredential azureCredential){
+    private CosmosClient createCosmosClient(DefaultAzureCredential azureCredential){
         if(azureCredential == null){
             System.out.println("The given azureCredential object is null in createCosmosClient");
         }

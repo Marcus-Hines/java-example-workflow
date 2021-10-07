@@ -5,6 +5,7 @@ metadata:
   labels:
     purpose: example-app-that-communicates-with-cosmosdb-msi
     app: cosmosapp
+    aadpodidbinding: "cosmosdbapp"
 spec:
   replicas: 1
   selector:
