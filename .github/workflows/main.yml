@@ -8,7 +8,7 @@ on:
 
 jobs:
   aks:
-    name: "Run app on AKS"
+    name: "Create cosmos DB and MSI"
     concurrency: test
     runs-on: ubuntu-latest
     steps:
@@ -19,9 +19,13 @@ jobs:
       - run: |
           az cosmosdb create --name ${{ secrets.ACCOUNT_NAME }} --resource-group ${{ secrets.RESOURCE_GROUP_NAME }} --subscription ${{ secrets.ARM_SUBSCRIPTION_ID }}
           az identity create -g ${{ secrets.RESOURCE_GROUP_NAME }} -n ${{ secrets.ACCOUNT_NAME }}
-          CLIENTID=$(az identity show -n ${{ secrets.ACCOUNT_NAME }} -g ${{ secrets.RESOURCE_GROUP_NAME }})
-          OBJECTID=$(az ad sp show --id $CLIENTID --query objectId --out tsv)
-          az cosmosdb sql role assignment create --account-name ${{ secrets.ACCOUNT_NAME }} --resource-group ${{ secrets.RESOURCE_GROUP_NAME }} --scope "/" --principal-id $OBJECTID --role-definition-id 00000000-0000-0000-0000-000000000001
+          echo "clientID=$(az identity show -n ${{ secrets.ACCOUNT_NAME }} -g ${{ secrets.RESOURCE_GROUP_NAME }})" >> $GITHUB_ENV
+      - run: |
+          echo "the client ID is mxh: ${{ env.clientID }}
+      - run : |
+          echo "objectID=$(az ad sp show --id ${{ env.clientID }} --query objectId --out tsv)" >> $GITHUB_ENV
+      - run: |
+          az cosmosdb sql role assignment create --account-name ${{ secrets.ACCOUNT_NAME }} --resource-group ${{ secrets.RESOURCE_GROUP_NAME }} --scope "/" --principal-id ${{ env.objectID }} --role-definition-id 00000000-0000-0000-0000-000000000001
       - uses: gambtho/aks_create_action@main
         with:
           CLUSTER_NAME: ${{ secrets.CLUSTER_NAME }}
