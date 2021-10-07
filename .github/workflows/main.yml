@@ -19,19 +19,10 @@ jobs:
       - run: |
           az cosmosdb create --name ${{ secrets.ACCOUNT_NAME }} --resource-group ${{ secrets.RESOURCE_GROUP_NAME }} --subscription ${{ secrets.ARM_SUBSCRIPTION_ID }}
           az identity create -g ${{ secrets.RESOURCE_GROUP_NAME }} -n ${{ secrets.ACCOUNT_NAME }}
-          az cosmosdb sql role assignment create --account-name ${{ secrets.ACCOUNT_NAME }} --resource-group ${{ secrets.RESOURCE_GROUP_NAME }} --scope "/" --principal-id $(az ad sp show --id $(az identity show -n ${{ secrets.ACCOUNT_NAME }} -g ${{ secrets.RESOURCE_GROUP_NAME }}) --query objectId --out tsv) --role-definition-id 00000000-0000-0000-0000-000000000001
+          CLIENTID=$(az identity show -n ${{ secrets.ACCOUNT_NAME }} -g ${{ secrets.RESOURCE_GROUP_NAME }})
+          OBJECTID=$(az ad sp show --id $CLIENTID --query objectId --out tsv)
+          az cosmosdb sql role assignment create --account-name ${{ secrets.ACCOUNT_NAME }} --resource-group ${{ secrets.RESOURCE_GROUP_NAME }} --scope "/" --principal-id $OBJECTID --role-definition-id 00000000-0000-0000-0000-000000000001
 
-
-
-
-
-
-        id: "cosmos_db_msi"
-      - run: |
-          echo "::set-output objectid=$(az ad sp show --id ${{ steps.cosmos_db_msi.outputs.clientid  }} --query objectId --out tsv)"
-        id: "object_id"
-      - run: |
-          az cosmosdb sql role assignment create --account-name ${{ secrets.ACCOUNT_NAME }} --resource-group ${{ secrets.RESOURCE_GROUP_NAME }} --scope "/" --principal-id ${{ steps.object_id.outputs.objectid }} --role-definition-id 00000000-0000-0000-0000-000000000001
       - uses: gambtho/aks_create_action@main
         with:
           CLUSTER_NAME: ${{ secrets.CLUSTER_NAME }}
