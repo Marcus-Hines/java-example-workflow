@@ -6,6 +6,8 @@ import com.azure.cosmos.models.CosmosQueryRequestOptions;
 import com.azure.cosmos.models.PartitionKey;
 import com.azure.cosmos.util.CosmosPagedIterable;
 import com.azure.identity.*;
+import com.azure.identity.implementation.IdentityClient;
+import com.azure.identity.implementation.IdentityClientBuilder;
 
 
 public class App {
@@ -23,12 +25,11 @@ public class App {
     private CosmosClient cosmosClient;
 
     public App(String databaseName) {
-
-
+        ManagedIdentityCredential msi = new ManagedIdentityCredentialBuilder().build();
         //Managed Identity Credentials
        // ManagedIdentityCredential msi = createMSICredentials();
         DefaultAzureCredential credential =  new DefaultAzureCredentialBuilder().build();
-       this.cosmosClient = createCosmosClient(credential);
+       this.cosmosClient = createCosmosClient(msi);
 
        //this.database = cosmosClient.getDatabase(DATABASE_NAME);
        //this.container = database.getContainer(CONTAINER_NAME);
@@ -62,7 +63,7 @@ public class App {
         return customer;
     }
 
-    private CosmosClient createCosmosClient(DefaultAzureCredential azureCredential){
+    private CosmosClient createCosmosClient(ManagedIdentityCredential azureCredential){
         if(azureCredential == null){
             System.out.println("The given azureCredential object is null in createCosmosClient");
         }
