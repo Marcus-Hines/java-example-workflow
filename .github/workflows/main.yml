@@ -68,7 +68,7 @@ jobs:
           PODCLIENTID=$(az identity show -n ${{ secrets.ACCOUNT_NAME }} -g ${{ secrets.RESOURCE_GROUP_NAME }} --query clientId --out tsv)
           PODRESOURCEID=$(az identity show -n ${{ secrets.ACCOUNT_NAME }} -g ${{ secrets.RESOURCE_GROUP_NAME }} --query id --out tsv)
 
-          az aks pod-identity add --resource-group ${{ secrets.RESOURCE_GROUP_NAME }} --cluster-name ${{ secrets.CLUSTER_NAME }} --namespace ${{ secrets.NAMESPACE }}  --name ${{ secrets.POD_IDENTITY_NAME }} --identity-resource-id $PODRESOURCEID
+          az aks pod-identity add --resource-group ${{ secrets.RESOURCE_GROUP_NAME }} --cluster-name ${{ secrets.CLUSTER_NAME }} --namespace ${{ secrets.NAMESPACE }}  --name ${{ secrets.POD_IDENTITY_NAME }} --enable-pod-identity-with-kubenet --identity-resource-id $PODRESOURCEID
 
       # Create image pull secret for ACR
       - uses: azure/k8s-create-secret@v1
