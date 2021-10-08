@@ -66,7 +66,10 @@ jobs:
           az aks update -g ${{ secrets.RESOURCE_GROUP_NAME }} -n ${{ secrets.CLUSTER_NAME }} --enable-pod-identity --enable-pod-identity-with-kubenet
 
           PODCLIENTID=$(az identity show -n ${{ secrets.ACCOUNT_NAME }} -g ${{ secrets.RESOURCE_GROUP_NAME }} --query clientId --out tsv)
+          PODPRINCIPLEID=$(az identity show -n ${{ secrets.ACCOUNT_NAME }} -g ${{ secrets.RESOURCE_GROUP_NAME }} --query principalId --out tsv)
           PODRESOURCEID=$(az identity show -n ${{ secrets.ACCOUNT_NAME }} -g ${{ secrets.RESOURCE_GROUP_NAME }} --query id --out tsv)
+
+          az role assignment create --role Reader --assignee PODPRINCIPLEID --scope /subscriptions/${{ secrets.ARM_SUBSCRIPTION_ID }}/resourcegroups/${{ secrets.RESOURCE_GROUP_NAME }}
 
           az aks pod-identity add --resource-group ${{ secrets.RESOURCE_GROUP_NAME }} --cluster-name ${{ secrets.CLUSTER_NAME }} --namespace ${{ secrets.NAMESPACE }}  --name ${{ secrets.POD_IDENTITY_NAME }} --identity-resource-id $PODRESOURCEID
 
