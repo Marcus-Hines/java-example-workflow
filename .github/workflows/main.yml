@@ -63,7 +63,7 @@ jobs:
       # Create namespace if it doesn't exist
       - run: |
           kubectl create namespace ${{ secrets.NAMESPACE }} --dry-run -o json | kubectl apply -f -
-          az aks update -g ${{ secrets.RESOURCE_GROUP_NAME }} -n ${{ secrets.CLUSTER_NAME }} --enable-pod-identity-with-kubenet 
+          az aks update -g ${{ secrets.RESOURCE_GROUP_NAME }} -n ${{ secrets.CLUSTER_NAME }} --enable-pod-identity --enable-pod-identity-with-kubenet
 
           PODCLIENTID=$(az identity show -n ${{ secrets.ACCOUNT_NAME }} -g ${{ secrets.RESOURCE_GROUP_NAME }} --query clientId --out tsv)
           PODRESOURCEID=$(az identity show -n ${{ secrets.ACCOUNT_NAME }} -g ${{ secrets.RESOURCE_GROUP_NAME }} --query id --out tsv)
