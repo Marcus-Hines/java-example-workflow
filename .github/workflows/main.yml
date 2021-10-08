@@ -17,6 +17,14 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDS }}
       - run: |
+          az feature register --name EnablePodIdentityPreview --namespace Microsoft.ContainerService
+
+          # Install the aks-preview extension
+          az extension add --name aks-preview
+
+          # Update the extension to make sure you have the latest version installed
+          az extension update --name aks-preview
+
           az cosmosdb create --name ${{ secrets.ACCOUNT_NAME }} --resource-group ${{ secrets.RESOURCE_GROUP_NAME }} --subscription ${{ secrets.ARM_SUBSCRIPTION_ID }}
           az identity create -g ${{ secrets.RESOURCE_GROUP_NAME }} -n ${{ secrets.ACCOUNT_NAME }}
           OBJECTID=$(az identity show -n ${{ secrets.ACCOUNT_NAME }} -g ${{ secrets.RESOURCE_GROUP_NAME }} --query principalId --out tsv)
