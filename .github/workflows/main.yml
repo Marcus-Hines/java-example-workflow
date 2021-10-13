@@ -13,23 +13,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: azure/login@v1
+      - uses: Marcus-Hines/cosmosdb-create@main
         with:
-          creds: ${{ secrets.AZURE_CREDS }}
-      - run: |
-          az feature register --name EnablePodIdentityPreview --namespace Microsoft.ContainerService
-
-          # Install the aks-preview extension
-          az extension add --name aks-preview
-
-          # Update the extension to make sure you have the latest version installed
-          az extension update --name aks-preview
-
-          az cosmosdb create --name ${{ secrets.ACCOUNT_NAME }} --resource-group ${{ secrets.RESOURCE_GROUP_NAME }} --subscription ${{ secrets.ARM_SUBSCRIPTION_ID }}
-          az identity create -g ${{ secrets.RESOURCE_GROUP_NAME }} -n ${{ secrets.ACCOUNT_NAME }}
-          OBJECTID=$(az identity show -n ${{ secrets.ACCOUNT_NAME }} -g ${{ secrets.RESOURCE_GROUP_NAME }} --query principalId --out tsv)
-          az cosmosdb sql role assignment create --account-name ${{ secrets.ACCOUNT_NAME }} --resource-group ${{ secrets.RESOURCE_GROUP_NAME }} --scope "/" --principal-id $OBJECTID --role-definition-id 00000000-0000-0000-0000-000000000001
-
+          ACCOUNT_NAME: ${{ secrets.ACCOUNT_NAME }}
+          RESOURCE_GROUP_NAME: ${{ secrets.RESOURCE_GROUP_NAME }}
+          ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+          ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
+          SP_USERNAME: ${{ secrets.SP_USERNAME }}
+          SP_SECRET: ${{ secrets.SP_SECRET }}
+          MSI_OBJECT_ID: ${{ secrets.MSI_OBJECT_ID }}
       - uses: gambtho/aks_create_action@main
         with:
           CLUSTER_NAME: ${{ secrets.CLUSTER_NAME }}
@@ -63,15 +55,7 @@ jobs:
       # Create namespace if it doesn't exist
       - run: |
           kubectl create namespace ${{ secrets.NAMESPACE }} --dry-run -o json | kubectl apply -f -
-          az aks update -g ${{ secrets.RESOURCE_GROUP_NAME }} -n ${{ secrets.CLUSTER_NAME }} --enable-pod-identity --enable-pod-identity-with-kubenet
-
-          PODCLIENTID=$(az identity show -n ${{ secrets.ACCOUNT_NAME }} -g ${{ secrets.RESOURCE_GROUP_NAME }} --query clientId --out tsv)
-          PODPRINCIPLEID=$(az identity show -n ${{ secrets.ACCOUNT_NAME }} -g ${{ secrets.RESOURCE_GROUP_NAME }} --query principalId --out tsv)
-          PODRESOURCEID=$(az identity show -n ${{ secrets.ACCOUNT_NAME }} -g ${{ secrets.RESOURCE_GROUP_NAME }} --query id --out tsv)
-
-          az role assignment create --role Reader --assignee PODPRINCIPLEID --scope /subscriptions/${{ secrets.ARM_SUBSCRIPTION_ID }}/resourcegroups/${{ secrets.RESOURCE_GROUP_NAME }}
-
-          az aks pod-identity add --resource-group ${{ secrets.RESOURCE_GROUP_NAME }} --cluster-name ${{ secrets.CLUSTER_NAME }} --namespace ${{ secrets.NAMESPACE }}  --name ${{ secrets.POD_IDENTITY_NAME }} --identity-resource-id $PODRESOURCEID
+          az aks update -g ${{ secrets.RESOURCE_GROUP_NAME }} -n ${{ secrets.CLUSTER_NAME }}
 
       # Create image pull secret for ACR
       - uses: azure/k8s-create-secret@v1
