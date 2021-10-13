@@ -58,6 +58,7 @@ jobs:
       - run: |
           kubectl create namespace ${{ secrets.NAMESPACE }} --dry-run -o json | kubectl apply -f -
 
+
       # Create image pull secret for ACR
       - uses: azure/k8s-create-secret@v1
         with:
