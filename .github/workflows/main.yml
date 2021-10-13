@@ -8,7 +8,7 @@ on:
 
 jobs:
   aks:
-    name: "Create cosmosDB & MSI"
+    name: "Create cosmosdb & MSI"
     concurrency: test
     runs-on: ubuntu-latest
     steps:
