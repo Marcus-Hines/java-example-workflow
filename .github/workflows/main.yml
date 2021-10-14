@@ -22,6 +22,7 @@ jobs:
           SP_USERNAME: ${{ secrets.SP_USERNAME }}
           SP_SECRET: ${{ secrets.SP_SECRET }}
           MSI_OBJECT_ID: ${{ secrets.MSI_OBJECT_ID }}
+          MSI_NAME: ${{ secrets.MSI_NAME }}
       - uses: gambtho/aks_create_action@main
         with:
           CLUSTER_NAME: ${{ secrets.CLUSTER_NAME }}
