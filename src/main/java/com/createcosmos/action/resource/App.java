@@ -12,7 +12,7 @@ import com.azure.identity.implementation.IdentityClientBuilder;
 
 public class App {
     private final String DATABASE_NAME = "DemoDatabase";
-    private final String CONTAINER_NAME = "CustomerDetails";
+    private final String CONTAINER_NAME = "CustomerDetail";
     //Cosmos Account Details
     private final String COSMOS_PATH = "documents.azure.com:443/";
     private final String COSMOS_ACCOUNT_NAME = "cosmosdbapp";
