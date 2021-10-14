@@ -41,7 +41,7 @@ jobs:
           username: ${{ secrets.ARM_CLIENT_ID }}
           password: ${{ secrets.ARM_CLIENT_SECRET }}
 
-      # Container build and push to an Azure Container Registry (ACR)
+      # Container build and push to an Azure Container Registry(ACR)
       - run: |
           docker build . -t ${{ secrets.CLUSTER_NAME }}.azurecr.io/${{ secrets.APP_NAME }}:${{ github.sha }}
           docker push ${{ secrets.CLUSTER_NAME }}.azurecr.io/${{ secrets.APP_NAME }}:${{ github.sha }}
