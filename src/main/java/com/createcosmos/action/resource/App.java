@@ -18,7 +18,7 @@ public class App {
     private final String COSMOS_ACCOUNT_NAME = "cosmosdbapp";
 
     private final String ENDPOINT = "https://" + COSMOS_ACCOUNT_NAME + "." + COSMOS_PATH;
-    public final String MANAGED_IDENTITY_CLIENT_ID = "651b1d5b-bc2f-405f-a77d-c6f739697c18";
+    public final String MANAGED_IDENTITY_CLIENT_ID = "17b0320a-aa7d-4904-a899-db1f8cf46c5a";
 
     private CosmosContainer container;
     private CosmosDatabase database;
