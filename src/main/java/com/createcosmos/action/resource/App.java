@@ -12,7 +12,7 @@ import com.azure.identity.implementation.IdentityClientBuilder;
 
 public class App {
     private final String DATABASE_NAME = "DemoDatabase";
-    private final String CONTAINER_NAME = "CustomerDetail";
+    private final String CONTAINER_NAME = "CustomerDetails";
     //Cosmos Account Details
     private final String COSMOS_PATH = "documents.azure.com:443/";
     private final String COSMOS_ACCOUNT_NAME = "cosmosdbapp";
@@ -25,10 +25,7 @@ public class App {
     private CosmosClient cosmosClient;
 
     public App(String databaseName) {
-        ManagedIdentityCredential msi = new ManagedIdentityCredentialBuilder().build();
-        //Managed Identity Credentials
-       // ManagedIdentityCredential msi = createMSICredentials();
-        DefaultAzureCredential credential =  new DefaultAzureCredentialBuilder().build();
+       ManagedIdentityCredential msi = createMSICredentials();
        this.cosmosClient = createCosmosClient(msi);
 
        //this.database = cosmosClient.getDatabase(DATABASE_NAME);
@@ -37,12 +34,7 @@ public class App {
 
     public void run() {
         System.out.println("App is starting...");
-      //  this.getAllCustomers();
-        DefaultAzureCredential credential =  new DefaultAzureCredentialBuilder().build();
-        CosmosClient client = new CosmosClientBuilder().credential(credential).buildClient();
-        client.close();
-
-       // this.cosmosClient.close();
+        this.cosmosClient.close();
     }
 
     private Customer getAllCustomers(){
