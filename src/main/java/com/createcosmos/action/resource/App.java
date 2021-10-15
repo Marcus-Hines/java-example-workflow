@@ -24,11 +24,14 @@ public class App {
 
     private CosmosContainer container;
     private CosmosDatabase database;
-    private CosmosClient cosmosClient;
+    private CosmosAsyncClient cosmosClient;
 
     public App(String databaseName) {
-       DefaultAzureCredential msi = createMSICredentials();
-       this.cosmosClient = createCosmosClient(msi);
+      // DefaultAzureCredential msi = createMSICredentials();
+       ManagedIdentityCredential cred =  new ManagedIdentityCredentialBuilder().clientId(MANAGED_IDENTITY_CLIENT_ID).build();
+       this.cosmosClient = new CosmosClientBuilder().endpoint(ENDPOINT).credential(cred).buildAsyncClient();
+
+       // this.cosmosClient = createCosmosClient(msi);
 
        //this.database = cosmosClient.getDatabase(DATABASE_NAME);
        //this.container = database.getContainer(CONTAINER_NAME);
