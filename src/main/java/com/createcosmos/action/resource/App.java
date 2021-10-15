@@ -27,9 +27,12 @@ public class App {
     private CosmosAsyncClient cosmosClient;
 
     public App(String databaseName) {
-      // DefaultAzureCredential msi = createMSICredentials();
-       ManagedIdentityCredential cred =  new ManagedIdentityCredentialBuilder().clientId(MANAGED_IDENTITY_CLIENT_ID).build();
-       this.cosmosClient = new CosmosClientBuilder().endpoint(ENDPOINT).credential(cred).buildAsyncClient();
+        //DefaultAzureCredential msi = createMSICredentials();
+      // ManagedIdentityCredential cred =  new ManagedIdentityCredentialBuilder().clientId(MANAGED_IDENTITY_CLIENT_ID).build();
+
+        DefaultAzureCredential defaultCredential = new DefaultAzureCredentialBuilder().build();
+
+        this.cosmosClient = new CosmosClientBuilder().endpoint(ENDPOINT).credential(defaultCredential).buildAsyncClient();
 
        // this.cosmosClient = createCosmosClient(msi);
 
@@ -73,7 +76,6 @@ public class App {
         DefaultAzureCredential defaultCredential = new DefaultAzureCredentialBuilder()
                 .managedIdentityClientId(MANAGED_IDENTITY_CLIENT_ID)
                 .build();
-
         return defaultCredential;
     }
 }
