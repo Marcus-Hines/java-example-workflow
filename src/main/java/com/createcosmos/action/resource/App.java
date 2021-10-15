@@ -20,12 +20,14 @@ public class App {
     private final String ENDPOINT = "https://" + COSMOS_ACCOUNT_NAME + "." + COSMOS_PATH;
     public final String MANAGED_IDENTITY_CLIENT_ID = "17b0320a-aa7d-4904-a899-db1f8cf46c5a";
 
+
+
     private CosmosContainer container;
     private CosmosDatabase database;
     private CosmosClient cosmosClient;
 
     public App(String databaseName) {
-       ManagedIdentityCredential msi = createMSICredentials();
+       DefaultAzureCredential msi = createMSICredentials();
        this.cosmosClient = createCosmosClient(msi);
 
        //this.database = cosmosClient.getDatabase(DATABASE_NAME);
@@ -55,14 +57,20 @@ public class App {
         return customer;
     }
 
-    private CosmosClient createCosmosClient(ManagedIdentityCredential azureCredential){
+    private CosmosClient createCosmosClient(DefaultAzureCredential azureCredential){
         if(azureCredential == null){
             System.out.println("The given azureCredential object is null in createCosmosClient");
         }
         return new CosmosClientBuilder().credential(azureCredential).endpoint(ENDPOINT).buildClient();
     }
 
-    private ManagedIdentityCredential createMSICredentials(){
-        return new ManagedIdentityCredentialBuilder().clientId(MANAGED_IDENTITY_CLIENT_ID).build();
+    private DefaultAzureCredential createMSICredentials(){
+       // return new ManagedIdentityCredentialBuilder().clientId(MANAGED_IDENTITY_CLIENT_ID).build();
+
+        DefaultAzureCredential defaultCredential = new DefaultAzureCredentialBuilder()
+                .managedIdentityClientId(MANAGED_IDENTITY_CLIENT_ID)
+                .build();
+
+        return defaultCredential;
     }
 }
