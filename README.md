@@ -1,4 +1,4 @@
-# Java-Example-App
+# Java-Example-Workflow
 
 This workflow can be used as an example for developers wanting to deploy Java apps using Github actions.
 
