@@ -6,7 +6,7 @@ This workflow can be used as an example for developers wanting to deploy Java ap
 This example workflow will:
    1. Create a k8's cluster on AKS 
    2. Build your applications image
-   3. Create and push your image to ACR (Azure Container Registry 
+   3. Create and push your image to ACR (Azure Container Registry) 
    4. Pull your image from ACR, and deploy your application on AKS 
 
 Workflows are defined in a `.yaml` file. The workflow file can be named anything, but it _must_ be inside a directory `./.github/workflows/`
