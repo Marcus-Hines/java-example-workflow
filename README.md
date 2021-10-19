@@ -16,8 +16,12 @@ You can define secrets and variables by navigating to your github repository's `
 Once you define your secrets, you can reference them with the syntax `${{ secrets.VARIABLE_NAME }}`
 
 You can now pass these values as arguments to your workflow actions, without having to define them in plain text. To use this workflow, make sure to define the required secrets in your Github repository.
-If you do not currently have the values needed to run this example, they can be created by running the script `./setup.sh -c <<cluster name> -g <<resource group name>> -s <<subscription id>> -r <<region>>
-`. The script will output the values needed. You can define these as secrets and pass them
+
+If you do not currently have the values needed to run this example, they can be created by running the script:
+`./setup.sh -c <<cluster name> -g <<resource group name>> -s <<subscription id>> -r <<region>>
+`
+
+The script will output the values needed. You can define these as secrets and pass them
 as arguments like seen below:
 
 ```
