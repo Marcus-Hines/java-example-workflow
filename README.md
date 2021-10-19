@@ -2,7 +2,7 @@
 
 This workflow can be used as an example for developers wanting to deploy Java apps using Github actions. For more details on Github Actions and workflows in general, see https://docs.github.com/en/actions/learn-github-actions/understanding-github-actions
 
-# The workflow:
+# This workflow:
 This example workflow will:
    1. Create a k8's cluster on AKS 
    2. Build your applications image
