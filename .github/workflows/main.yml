@@ -13,16 +13,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: Marcus-Hines/cosmosdb-create@main
-        with:
-          ACCOUNT_NAME: ${{ secrets.ACCOUNT_NAME }}
-          RESOURCE_GROUP_NAME: ${{ secrets.RESOURCE_GROUP_NAME }}
-          ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
-          ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
-          SP_USERNAME: ${{ secrets.SP_USERNAME }}
-          SP_SECRET: ${{ secrets.SP_SECRET }}
-          MSI_OBJECT_ID: ${{ secrets.MSI_OBJECT_ID }}
-          MSI_NAME: ${{ secrets.MSI_NAME }}
       - uses: gambtho/aks_create_action@main
         with:
           CLUSTER_NAME: ${{ secrets.CLUSTER_NAME }}

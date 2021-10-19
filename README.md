@@ -1,29 +1,37 @@
-# cosmosdb-java-example-app
+# java-example-app
 
-This workflow can be used by apps that will be using a managed cosmosdb instance on AKS, and want their application to communicate with cosmosdb using MSI (Managed Service Identity)
+This workflow can be used as an example for developers wanting to deploy Java apps using Github actions.
 
-# Before using this workflow:
-You will need to create an MSI in aks that will be assigned to the nodes on your AKS cluster. This MSI will be granted the permissions required to access the cosmosdb instance that is created by this action
-The following inputs are required:
+# The workflow:
+This example workflow will:
+   1. Create a k8's cluster on AKS 
+   2. Build your applications image
+   3. Create and push your image to ACR (Azure Container Registry 
+   4. Pull your image from ACR, and deploy your application on AKS 
 
-`ACCOUNT_NAME:` (_required_) This is whatever you would like for you cosmosdb account in AKS to be named
-. __Example:__. `mycosmosdb`
+Workflows are defined in a `.yaml` files. The workflow file can be named anything, but it _must_ be inside a directory `./.github/workflows/`
 
-`RESOURCE_GROUP_NAME:` (_required_) This is the resource group that you want your cosmosdb account to be created in.
-. __Example:__. `cosmosrg`
+# Using variables and secrets in your `.yaml` workflow
+You can define secrets and variables by navigating to your github repository's `settings` page. You can define a new secrets variables by selecting "New Repository Secret"
+Once you define your secrets, you can reference them with the syntax `${{ secrets.VARIABLE_NAME }}`
 
-`SUBSCRIPTION_ID:` (_required_) This is the subscription id that your resource group belongs to
-. __Example:__. `00000000-0000-0000-0000-000000000000`
+You can now pass these values as arguments to your workflow actions, without having to define them in plain text. To use this workflow, make sure to define the required secrets in your Github repository.
 
+```
+   steps:
+    - uses: actions/checkout@v2
+    - uses: Marcus-Hines/cosmosdb-create@main
+    with:
+        ACCOUNT_NAME: ${{ secrets.ACCOUNT_NAME }}
+        RESOURCE_GROUP_NAME: ${{ secrets.RESOURCE_GROUP_NAME }}
+        ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+        ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
+        SP_USERNAME: ${{ secrets.SP_USERNAME }}
+        SP_SECRET: ${{ secrets.SP_SECRET }}
+        MSI_OBJECT_ID: ${{ secrets.MSI_OBJECT_ID }}
+        MSI_NAME: ${{ secrets.MSI_NAME }}
+```
 
-`OBJECT_ID:` (_required_) This is the object id or principle id associated with the MSI that you will be using to communicate with CosmosDB
-. __Example:__. `00000000-0000-0000-0000-000000000000` **If you don't have an MSI, you can run:
-
-     az identity create -g < your-resource-group> -n <whatever-you-want-to-name-your-msi>
-     echo $(az identity show -n <whatever-you-want-to-name-your-msi> -g <your-resource-group> --query principalId --out tsv)
-
-This will create the MSI and output the object id (principle id) of the MSI. You can then copy the object id and pass that as an arg to this action, and also reference it in your application code when attempting to access
-CosmosDB with MSI.
 
 
 
