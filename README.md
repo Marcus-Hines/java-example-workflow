@@ -20,7 +20,7 @@ If you do not currently have the values needed to run this example, they can be 
 `. The script will output the values needed. You can define these as secrets and pass them
 as arguments like seen below:
 
-```
+```yaml
    steps:
     - uses: actions/checkout@v2
     - uses: gambtho/aks_create_action@main
@@ -37,6 +37,23 @@ as arguments like seen below:
       CREATE_ACR: true
 ```
 
+# aks-set-context
+This example workflow leverages `aks-set-context` action, which requires the use of azure credentials. To generate these credentials
+run the following command, and copy the output into your Github actions secret variables:
+
+`az ad sp create-for-rbac --sdk-auth`
+
+```yaml
+uses: azure/aks-set-context@v1
+    with:
+    creds: '${{ secrets.AZURE_CREDENTIALS }}' # Azure credentials
+    resource-group: '<resource group name>'
+    cluster-name: '<cluster name>'
+```
+
+
+az ad sp create-for-rbac --sdk-auth
+
 
 # Defining your deployment
 You will define your k8's deployment in a yaml file, as you would other kubernetes deployments. For more details on Kubernetes deployments,
@@ -45,7 +62,7 @@ see https://kubernetes.io/docs/tutorials/kubernetes-basics/deploy-app/deploy-int
 The file path of your deployment will be passed as a `manifests` argument to the following `azure/k8s-deploy@v1` action. In the example the path is `k8/deployment.yaml`. Be sure to update this
 if your pathname differs. 
 
-```
+```yaml
 - uses: azure/k8s-deploy@v1
     with:
       manifests: |
@@ -57,6 +74,8 @@ if your pathname differs.
       namespace: ${{ secrets.NAMESPACE }}
 
 ```
+
+
 
 
 
