@@ -1,6 +1,6 @@
 # Java-Example-Workflow
 
-This workflow can be used as an example for developers wanting to deploy Java apps using Github actions.
+This workflow can be used as an example for developers wanting to deploy Java apps using Github actions. For more details on Github Actions and workflows in general, see https://docs.github.com/en/actions/learn-github-actions/understanding-github-actions
 
 # The workflow:
 This example workflow will:
