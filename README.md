@@ -38,7 +38,10 @@ as arguments like seen below:
 ```
 
 # aks-set-context
-This example workflow leverages `aks-set-context` action, which requires the use of azure credentials. To generate these credentials
+This example workflow leverages the `aks-set-context` action, which requires the use of azure credentials.
+The purpose of this action is to set cluster context before other actions like `azure/k8s-deploy`, `azure/k8s-create-secret` or any kubectl commands (in script) that can be run subsequently in the workflow.
+
+To generate the  credentials needed for this action
 run the following command, and copy the output into your Github actions secret variables:
 
 `az ad sp create-for-rbac --sdk-auth`
