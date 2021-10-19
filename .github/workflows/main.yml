@@ -8,15 +8,11 @@ on:
 
 jobs:
   aks:
-    name: "Run app on AKS"
+    name: "Create cosmosdb and MSI"
     concurrency: test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: Marcus-Hines/cosmosdb-create@main
-        with:
-          ACCOUNT_NAME: ${{ secrets.ACCOUNT_NAME }}
-          RESOURCE_GROUP_NAME: ${{ secrets.RESOURCE_GROUP_NAME }}
       - uses: gambtho/aks_create_action@main
         with:
           CLUSTER_NAME: ${{ secrets.CLUSTER_NAME }}
@@ -46,7 +42,9 @@ jobs:
           creds: '${{ secrets.AZURE_CREDS }}'
           cluster-name: ${{ secrets.CLUSTER_NAME }}
           resource-group: ${{ secrets.RESOURCE_GROUP_NAME }}
-
+      - uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDS }}
       # Create namespace if it doesn't exist
       - run: |
           kubectl create namespace ${{ secrets.NAMESPACE }} --dry-run -o json | kubectl apply -f -

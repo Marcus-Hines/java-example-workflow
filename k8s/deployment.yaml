@@ -5,6 +5,7 @@ metadata:
   labels:
     purpose: example-app-that-communicates-with-cosmosdb-msi
     app: cosmosapp
+    aadpodidbinding: "cosmosdbappid"
 spec:
   replicas: 1
   selector:
@@ -22,5 +23,5 @@ spec:
           ports:
             - containerPort: 80
           env:
-            - name: ENV_VARS_GO_HERE
-              value: "arbitrary value"
+            - name: AZURE_CLIENT_ID
+              value: "71ac8979-e82e-4ec6-819d-a1ed4a0e332a"
